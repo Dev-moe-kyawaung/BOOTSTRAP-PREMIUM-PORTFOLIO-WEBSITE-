@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moe Kyaw Aung | Android Developer | မိုးကျော်အောင်</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-gradient: linear-gradient(135deg, #0f0f23 0%, #2d1b69 50%, #1a1a2e 100%);
+            --glass-bg: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+        }
+        * { font-family: 'Poppins', sans-serif; }
+        body { 
+            background: var(--dark-gradient);
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%);
+            z-index: -1;
+        }
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: var(--glass-bg);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        .navbar.scrolled { padding: 0.5rem 0; }
+        .nav-link { color: rgba(255,255,255,0.8) !important; font-weight: 500; }
+        .nav-link:hover { color: #fff !important; }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 0;
+        }
+        .hero h1 { 
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #a8b8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+        .typing-text { min-height: 60px; }
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(102,126,234,0.4); }
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .skill-bar {
+            background: rgba(255,255,255,0.1);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .skill-progress {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 10px;
+            width: 0;
+            transition: width 2s ease-in-out;
+        }
+        .section-title {
+            position: relative;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+        .project-card img { height: 200px; object-fit: cover; border-radius: 15px 15px 0 0; }
+        .contact-form input, .contact-form textarea {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: #fff;
+            padding: 15px;
+        }
+        .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,0.6); }
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .back-to-top.show { opacity: 1; visibility: visible; }
+        @media (max-width: 768px) {
+            .hero { text-align: center; padding: 50px 0; }
+            .navbar-brand { font-size: 1.2rem !important; }
+        }
+        .mm-text { font-family: 'Pyidaungsu', sans-serif; }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#home">
+                <i class="fas fa-code me-2"></i> Moe Kyaw Aung
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1>Hi, I'm <span class="text-primary">Moe Kyaw Aung</span></h1>
+                    <div class="h2 mb-4 typing-text">
+                        <span id="typed"></span>
+                    </div>
+                    <p class="lead mb-4 text-light opacity-90">Android Developer | Full Stack | Myanmar<br>
+                    <span class="mm-text">အန်ဒရောက်ဒီဗလပ်ပါ | ဖလပ်စတက် ဒီဗလပ်ပါ</span></p>
+                    <div>
+                        <a href="#projects" class="btn btn-primary btn-lg me-3">View Projects</a>
+                        <a href="#contact" class="btn btn-outline-light btn-lg">Hire Me</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="glass-card p-5 mx-auto" style="max-width: 400px;">
+                        <img src="https://avatars.githubusercontent.com/u/12345678?v=4" alt="Moe Kyaw Aung" 
+                             class="rounded-circle img-fluid mb-4" style="width: 150px; height: 150px; object-fit: cover;">
+                        <h4 class="mb-1">Moe Kyaw Aung</h4>
+                        <p class="text-muted mb-0">Android Developer at Microsoft</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center text-white">About Me</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4">
+                    <div class="glass-card p-5">
+                        <h3 class="mb-3">Android Developer with Passion</h3>
+                        <p class="text-light">I'm based in Tachileik, Myanmar with nearly 2 years experience building reliable, secure Android apps. I love clean architecture, modern tools, and great UX.</p>
+                        <p class="text-light"><strong>DoB:</strong> 05.07.2000 | <strong>Email:</strong> moekyawaung@engineer.com</p>
+                        <div class="mt-4">
+                            <a href="https://www.linkedin.com/in/moe-kyaw-aung-2653093a1" class="btn btn-outline-light me-2 mb-2">
+                                <i class="fab fa-linkedin me-1"></i> LinkedIn
+                            </a>
+                            <a href="https://github.com/Moe-KyawAung" class="btn btn-primary mb-2">
+                                <i class="fab fa-github me-1"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="glass-card p-5">
+                        <h5 class="mb-3">Education</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-graduation-cap text-primary me-2"></i>Bachelor of Computer Science - University of Computer Studies, Yangon (2014-2018)</li>
+                        </ul>
+                        <h5 class="mt-4 mb-3">Certifications</h5>
+                        <div class="row text-center">
+                            <div class="col-6 col-md-4 mb-3"><div class="badge bg-primary p-2 rounded-3 w-100">AWS Architect</div></div>
+                            <div class="col-6 col-md-4 mb-3"><div class="badge bg-success p-2 rounded-3 w-100">CKAD</div></div>
+                            <div class="col-6 col-md-4 mb-3"><div class="badge bg-info p-2 rounded-3 w-100">Cyber Security</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center text-white mb-5">Skills</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="glass-card p-4 text-center">
+                        <i class="fas fa-mobile-alt fa-3x text-primary mb-3"></i>
+                        <h5>Android Development</h5>
+                        <div class="skill-bar mt-3">
+                            <div class="skill-progress" data-width="95%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="glass-card p-4 text-center">
+                        <i class="fab fa-react fa-3x text-success mb-3"></i>
+                        <h5>React / Frontend</h5>
+                        <div class="skill-bar mt-3">
+                            <div class="skill-progress" data-width="90%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="glass-card p-4 text-center">
+                        <i class="fas fa-server fa-3x text-info mb-3"></i>
+                        <h5>Node.js / Backend</h5>
+                        <div class="skill-bar mt-3">
+                            <div class="skill-progress" data-width="85%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center text-white">Projects</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="glass-card project-card h-100">
+                        <img src="https://via.placeholder.com/400x200/667eea/ffffff?text=E-Commerce" class="w-100" alt="E-Commerce">
+                        <div class="p-4">
+                            <h5>E-Commerce Platform</h5>
+                            <p class="text-light">Full-stack with Stripe, PayPal integration</p>
+                            <p><strong>Tech:</strong> React, Node.js, MongoDB, AWS</p>
+                            <a href="https://github.com/Moe-KyawAung/ecommerce" class="btn btn-primary w-100">
+                                <i class="fab fa-github me-1"></i> View on GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="glass-card project-card h-100">
+                        <img src="https://via.placeholder.com/400x200/764ba2/ffffff?text=Analytics" class="w-100" alt="Analytics">
+                        <div class="p-4">
+                            <h5>AI Analytics Dashboard</h5>
+                            <p class="text-light">Real-time ML predictions & PDF export</p>
+                            <p><strong>Tech:</strong> Python, FastAPI, React, Docker</p>
+                            <a href="https://github.com/Moe-KyawAung/analytics-dashboard" class="btn btn-primary w-100">
+                                <i class="fab fa-github me-1"></i> View on GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="glass-card project-card h-100">
+                        <img src="https://via.placeholder.com/400x200/2d1b69/ffffff?text=Android+Apps" class="w-100" alt="Android Apps">
+                        <div class="p-4">
+                            <h5>Android Applications</h5>
+                            <p class="text-light">Production Android apps with clean architecture</p>
+                            <p><strong>Tech:</strong> Kotlin, Jetpack, Firebase</p>
+                            <a href="https://github.com/Moe-KyawAung" class="btn btn-primary w-100">
+                                <i class="fab fa-github me-1"></i> More Projects
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center text-white mb-5">Get In Touch</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="glass-card p-5">
+                        <form class="contact-form" id="contactForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <input type="text" class="form-control" placeholder="Your Name" required>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <input type="email" class="form-control" placeholder="Your Email" required>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <div class="d-flex justify-content-center gap-4 flex-wrap">
+                    <a href="mailto:moekyawaung@engineer.com" class="text-white fs-3"><i class="fas fa-envelope"></i></a>
+                    <a href="tel:+959889000889" class="text-white fs-3"><i class="fas fa-phone"></i></a>
+                    <a href="https://www.linkedin.com/in/moe-kyaw-aung-2653093a1" class="text-white fs-3"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/Moe-KyawAung" class="text-white fs-3"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" title="Back to Top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.umd.js"></script>
+    <script>
+        // Typing Effect
+        new Typed('#typed', {
+            strings: [
+                'Android Developer',
+                'Full Stack Developer',
+                'Kotlin Expert',
+                'အန်ဒရောက်ဒီဗလပ်ပါ',
+                'မိုဘိုင်းအက်ပ်တီဗလပ်ပါ'
+            ],
+            typeSpeed: 50,
+            backSpeed: 30,
+            backDelay: 1000,
+            loop: true
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            document.querySelector('.navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animate Skills on Scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('.skill-progress').forEach(bar => {
+                        bar.style.width = bar.dataset.width;
+                    });
+                }
+            });
+        });
+        observer.observe(document.getElementById('skills'));
+
+        // Back to Top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('show', window.scrollY > 300);
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Contact Form Validation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you! Your message has been sent. 🚀');
+            this.reset();
+        });
+
+        // Animate on Scroll
+        const animateOnScroll = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            animateOnScroll.observe(card);
+        });
+    </script>
+</body>
+</html>
